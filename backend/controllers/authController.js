@@ -2,7 +2,7 @@ const User = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-exports.register = async (req, res) => {
+const register =  async (req, res) => {
     const { username, password } = req.body;
 
     try {
@@ -39,7 +39,7 @@ exports.register = async (req, res) => {
 };
 
 // Login a user
-exports.login = async (req, res) => {
+const login = async (req, res) => {
     const { username, password } = req.body;
 
     try {
@@ -57,3 +57,33 @@ exports.login = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
+// const login = async (req, res) => {
+//     const { username, password } = req.body;
+
+//     if (!username || !password) {
+//         return res.status(400).json({ message: "Username and password are required." });
+//     }
+
+//     try {
+//         const user = await User.findOne({ username });
+
+//         if (!user) {
+//             return res.status(401).json({ message: "Invalid credentials." });
+//         }
+
+//         const isMatch = await bcrypt.compare(password, user.password);
+//         console.log('isMatch: ', isMatch);
+
+//         if (!isMatch) {
+//             return res.status(401).json({ message: "Invalid credentials." });
+//         }
+
+//         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+//         return res.json({ token, message: "Login successful" });
+//     } catch (error) {
+//         console.error("Login error:", error);
+//         return res.status(500).json({ message: "Server error" });
+//     }
+// };
+
+module.exports = { register, login };
