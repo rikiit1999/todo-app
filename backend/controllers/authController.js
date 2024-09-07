@@ -1,8 +1,6 @@
 const User = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
 
 const register =  async (req, res) => {
     const { username, password } = req.body;
