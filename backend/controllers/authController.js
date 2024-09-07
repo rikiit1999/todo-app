@@ -1,6 +1,8 @@
 const User = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 const register =  async (req, res) => {
     const { username, password } = req.body;
@@ -50,6 +52,10 @@ const login = async (req, res) => {
         if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        // save token to cookie .
+        res.cookie('auth-token', token, { httpOnly: true, maxAge: 1000 * 60 * 60 });
+        req.session.user = { username: user.username };
 
         res.json({ token });
     } catch (err) {
